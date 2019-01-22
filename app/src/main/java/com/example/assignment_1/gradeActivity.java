@@ -15,16 +15,19 @@ public class gradeActivity extends AppCompatActivity {
 
     protected static boolean showGradesAsLetter = false; //true means letter grade view so false means number grade view
     ArrayList<Course> courses = new ArrayList<>();  //initialize course array list
-    ListView gradeList;
+    ListView gradeList; //gradeList links to the xml list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Course.resetId();
+
+        //format ActionBar and Content
         ActionBar ab = getSupportActionBar();   //get the Action Bar object
         ab.setTitle("My Grades");   //set the title
         ab.setDisplayHomeAsUpEnabled(true); //enable UP button, parent is declared in the manifest
         setContentView(R.layout.activity_grade);
+
+        //link gradeList with the xml list
         gradeList = (ListView)findViewById(R.id.gradeList);
 
         //Generate Random Number of Courses;
@@ -55,15 +58,6 @@ public class gradeActivity extends AppCompatActivity {
             case R.id.action_switchGrade:
                 showGradesAsLetter = !showGradesAsLetter;   //flip the variable, if true becomes false and if false becomes true
                 printGrades();
-                /*
-                if (showGradesAsLetter == true){
-                    printGradesAsLetter();
-                }
-                else
-                {
-                    printGradesAsNumber();
-                }
-                */
                 return true;
 
             default:
