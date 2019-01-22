@@ -20,6 +20,7 @@ public class gradeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Course.resetId();
         ActionBar ab = getSupportActionBar();   //get the Action Bar object
         ab.setTitle("My Grades");   //set the title
         ab.setDisplayHomeAsUpEnabled(true); //enable UP button, parent is declared in the manifest
@@ -32,7 +33,7 @@ public class gradeActivity extends AppCompatActivity {
 
         //Generate and Populate The Course List
         for(int j=0; j<numberOfCourses; j++) {
-            Course generatedCourse = Course.generateRandomCourse();
+            Course generatedCourse =   Course.generateRandomCourse();
             courses.add(generatedCourse);
         }
 
@@ -125,28 +126,55 @@ public class gradeActivity extends AppCompatActivity {
         }
         else {
             for (int i = 0; i < courses.size(); i++) {  //iterate through the courses to process one at a time
+                if (i != 0) { //add a blank line to seperate courses, unless it's the first course
+                    arrayList.add("");
+                }
                 Course tempCourse = courses.get(i); //get a Course object to work with
                 ArrayList<Assignment> tempCourseAssignments = tempCourse.getAssignments();  //get Assignment list from tempCourse Object
-                String title = tempCourse.getCourseTitle(); //get course title
-                arrayList.add(tempCourse.getCourseTitle());
+                //String title = tempCourse.getCourseTitle(); //get course title
+                //arrayList.add(tempCourse.getCourseTitle());
+
+                    //Calculate Average and make it into a string
+                int average = getAssignmentAverage(tempCourseAssignments);  //get course average
+                String averageString;
+                if (tempCourseAssignments.size() == 0){    //check if no assignments present
+                    averageString = "N/A";
+                }
+                else if (showGradesAsLetter == true){   //check showGradeaAsLetter flag
+                    averageString = convertGradeToLetter(average);
+                }
+                else{
+                    averageString = Integer.toString(average);
+                }
+
+                    //output course line
+                arrayList.add("Course " + getNumberPlusOne(i) + "              Average: " + averageString);    //array starts at 0 but want it start at 1 since there is no 'Course 0', need to use an external function to add 1 since 'i+1' would print the string 'i' plus the string '1'
                 if (tempCourseAssignments.size() == 0) {
-                    arrayList.add("No Assignments Yet");
+                    arrayList.add("     No Assignments Yet");
                     continue;
                 }
-                int average = getAssignmentAverage(tempCourseAssignments);  //get course average
-                arrayList.add("Average: " + Integer.toString(getAssignmentAverage(tempCourse.getAssignments())));
+                //arrayList.add("Average: " + Integer.toString(getAssignmentAverage(tempCourse.getAssignments())));
+
+                    //Iterate through assignments to output Assignment info
                 for (int j = 0; j < tempCourseAssignments.size(); j++) {
-                    arrayList.add(tempCourseAssignments.get(j).getAssignmentTitle());
+                    //arrayList.add(tempCourseAssignments.get(j).getAssignmentTitle());
+                    arrayList.add("     Assignment: " + getNumberPlusOne(j));     //array starts at 0 but want it start at 1 since there is no 'Assignment 0', need to use an external function to add 1 since 'i+1' would print the string 'i' plus the string '1'
                     if (showGradesAsLetter == true){
-                        arrayList.add("Assignment Grade : " + convertGradeToLetter(tempCourseAssignments.get(j).getAssignmentGrade()));
+                        arrayList.add("         Assignment Grade : " + convertGradeToLetter(tempCourseAssignments.get(j).getAssignmentGrade()));
                     }
                     else{
-                        arrayList.add("Assignment Grade : " + Integer.toString(tempCourseAssignments.get(j).getAssignmentGrade()));
+                        arrayList.add("         Assignment Grade : " + Integer.toString(tempCourseAssignments.get(j).getAssignmentGrade()));
                     }
                 }
             }
         }
         ArrayAdapter arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList);
         gradeList.setAdapter(arrayAdapter);
+    }
+
+    //returns the number plus 1, used for printing the course or assignment number, can't be done inline since 'i+1' would print the string i plus the string 1
+    int getNumberPlusOne(int courseNumber)
+    {
+        return courseNumber+1;
     }
 }
