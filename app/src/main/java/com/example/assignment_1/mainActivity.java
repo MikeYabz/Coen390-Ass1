@@ -18,13 +18,9 @@ public class mainActivity extends AppCompatActivity {
 
         viewGradesButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-
                 viewGradesButtonPressed();
-
             }
         });
-
     }
 
     void viewGradesButtonPressed()
@@ -32,6 +28,5 @@ public class mainActivity extends AppCompatActivity {
         Intent intent = new Intent(mainActivity.this, gradeActivity.class);
         startActivity(intent);
     }
-
 
 }
